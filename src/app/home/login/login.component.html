@@ -1,0 +1,33 @@
+<div class="main" *ngIf="!forgot">
+  <form [formGroup]="authForm" (ngSubmit)="login()">
+    <div>
+      <ion-item>
+        <ion-icon color="secondary" name="mail" slot="start"></ion-icon>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input formControlName="email" inputmode="email"></ion-input>
+      </ion-item>
+      <mat-error *ngIf="f.email.errors && (f.email.dirty || f.email.touched || submitted)">
+        <div *ngIf="f.email.errors.required">You must enter a value</div>
+        <div *ngIf="f.email.errors.email">Not a valid email</div>
+      </mat-error>
+      <ion-item>
+        <ion-icon  color="secondary" name="lock-closed" slot="start"></ion-icon>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input [type]="type" formControlName="password"></ion-input>
+        <ion-icon  [color]="color" [name]="eye" (click)="changePassword()" slot="end" style="margin-top: 15px;"></ion-icon>
+      </ion-item>
+      <mat-error *ngIf="f.password.errors && (f.password.dirty || f.password.touched || submitted)">
+        <div *ngIf="f.password.errors.required">You must enter a password</div>
+      </mat-error>
+      <div class="forgot">
+        <ion-button [routerLink]="['/forgot-password']" slots="end" routerDirection="forward"
+         fill="clear" size="small">Forgot password
+        </ion-button>
+      </div>
+      <ion-button type="submit" routerDirection="forward" fill="outline" expand="block">
+        <ion-icon name="log-in" slot="start"></ion-icon> 
+        Sign in
+      </ion-button>
+    </div>
+  </form>
+</div>
