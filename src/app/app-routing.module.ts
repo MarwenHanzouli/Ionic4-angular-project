@@ -18,10 +18,6 @@ const routes: Routes = [
   {
     path: 'dashboard/:id',
     loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule)
-  },
-  {
-    path: 'my-account',
-    loadChildren: () => import('./my-account/my-account.module').then( m => m.MyAccountPageModule)
   }
 ];
 
