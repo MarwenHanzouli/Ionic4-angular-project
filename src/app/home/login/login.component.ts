@@ -15,7 +15,6 @@ export class LoginComponent implements OnInit {
   type:string;
   eye:string;
   color:string;
-  forgot:boolean;
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -24,7 +23,6 @@ export class LoginComponent implements OnInit {
     this.type="password";
     this.eye="eye-off";
     this.color="primary";
-    this.forgot=false;
   }
   initForm()
   {
@@ -52,7 +50,5 @@ export class LoginComponent implements OnInit {
     {
       return;
     }
-    
-    console.log(this.authForm.value)
   }
 }
