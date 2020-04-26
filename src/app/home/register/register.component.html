@@ -1,3 +1,69 @@
-<p>
-  register works!
-</p>
+<div class="main" *ngIf="!forgot">
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <div>
+      <ion-item>
+        <ion-icon color="secondary" name="person" slot="start"></ion-icon>
+        <ion-label position="floating">Firstname</ion-label>
+        <ion-input clearInput="true" formControlName="firstName" inputmode="text"></ion-input>
+      </ion-item>
+      <mat-error *ngIf="f.firstName.errors && (f.firstName.dirty || f.firstName.touched || submitted)">
+        <div *ngIf="f.firstName.errors.required">You must enter a value</div>
+      </mat-error>
+
+      <ion-item>
+        <ion-icon color="secondary" name="person" slot="start"></ion-icon>
+        <ion-label position="floating">Lastname</ion-label>
+        <ion-input clearInput="true" formControlName="lastName" inputmode="text"></ion-input>
+      </ion-item>
+      <mat-error *ngIf="f.lastName.errors && (f.lastName.dirty || f.lastName.touched || submitted)">
+        <div *ngIf="f.lastName.errors.required">You must enter a value</div>
+      </mat-error>
+
+      <ion-item>
+        <ion-icon color="secondary" name="call" slot="start"></ion-icon>
+        <ion-label position="floating">Phone number</ion-label>
+        <ion-input clearInput="true" formControlName="phone" inputmode="text"></ion-input>
+      </ion-item>
+      <mat-error *ngIf="f.phone.errors && (f.phone.dirty || f.phone.touched || submitted)">
+        <div *ngIf="f.phone.errors.required">You must enter a value</div>
+        <div *ngIf="f.phone.errors.pattern">You must enter a valid phone</div>
+      </mat-error>
+
+      <ion-item>
+        <ion-icon color="secondary" name="mail" slot="start"></ion-icon>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input clearInput="true" formControlName="email" inputmode="email"></ion-input>
+      </ion-item>
+      <mat-error *ngIf="f.email.errors && (f.email.dirty || f.email.touched || submitted)">
+        <div *ngIf="f.email.errors.required">You must enter a value</div>
+        <div *ngIf="f.email.errors.email">Not a valid email</div>
+      </mat-error>
+
+      <ion-item>
+        <ion-icon  color="secondary" name="lock-closed" slot="start"></ion-icon>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input clearInput="true" [type]="type" formControlName="password"></ion-input>
+        <ion-icon  [color]="color" [name]="eye" (click)="changePassword()" slot="end" style="margin-top: 15px;"></ion-icon>
+      </ion-item>
+      <mat-error *ngIf="f.password.errors && (f.password.dirty || f.password.touched || submitted)">
+        <div *ngIf="f.password.errors.required">You must enter a password</div>
+      </mat-error>
+
+      <ion-item>
+        <ion-icon  color="secondary" name="lock-closed" slot="start"></ion-icon>
+        <ion-label position="floating">Confirm password</ion-label>
+        <ion-input clearInput="true" [type]="type" formControlName="repassword"></ion-input>
+        <ion-icon  [color]="color" [name]="eye" (click)="changePassword()" slot="end" style="margin-top: 15px;"></ion-icon>
+      </ion-item>
+      <mat-error *ngIf="f.repassword.errors && (f.repassword.dirty || f.repassword.touched || submitted)">
+        <div *ngIf="f.repassword.errors.required">You must enter a password</div>
+        <div *ngIf="f.repassword.errors.mustMatch">You must enter the same password</div>
+      </mat-error>
+
+      <ion-button type="submit" routerDirection="forward" color="tertiary" fill="solid" expand="block">
+        <ion-icon name="person-add" slot="start"></ion-icon> 
+        Sign up
+      </ion-button>
+    </div>
+  </form>
+</div>
