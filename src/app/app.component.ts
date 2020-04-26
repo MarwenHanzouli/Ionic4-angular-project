@@ -17,8 +17,9 @@ export class AppComponent implements OnInit,OnDestroy{
 
   private userSubscription:Subscription;
   private user:User;
-
+  private connected:boolean;
   private selectedIndex=0;
+
   private menu=[
     {
       id:'Home',
@@ -87,23 +88,30 @@ export class AppComponent implements OnInit,OnDestroy{
   ngOnInit(): void {
     this.userSubscription=this.usersService.userOb.subscribe((u)=>
       {
-        this.user=u;
-        if(this.user.role==="USER")
+        if(u)
         {
-          this.menu=this.menu.concat(this.menuUser);
+          this.connected=false;
+          this.user=u;
+          if(this.user.role==="USER")
+          {
+            this.menu=this.menu.concat(this.menuUser);
+          }
+          else if(this.user.role==="AGENT")
+          {
+            this.menu=this.menu.concat(this.menuAgent);
+          }
+          else if(this.user.role==="AMBULANCIER")
+          {
+            this.menu=this.menu.concat(this.menuAmbulancier);
+          }
+          const path = window.location.pathname.split('dashboard/')[1];
+          if (path !== undefined) 
+          {
+            this.selectedIndex = this.menu.findIndex(page => page.id.toLowerCase() === path.toLowerCase());
+          }
         }
-        else if(this.user.role==="AGENT")
-        {
-          this.menu=this.menu.concat(this.menuAgent);
-        }
-        else if(this.user.role==="AMBULANCIER")
-        {
-          this.menu=this.menu.concat(this.menuAmbulancier);
-        }
-        const path = window.location.pathname.split('dashboard/')[1];
-        if (path !== undefined) 
-        {
-          this.selectedIndex = this.menu.findIndex(page => page.id.toLowerCase() === path.toLowerCase());
+        else{
+          this.connected=true;
         }
       }
     );

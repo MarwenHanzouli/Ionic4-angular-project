@@ -1,10 +1,11 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu side="start" content-id="main-content" disabled="false">
-      <ion-header [translucent]="true">
+    <ion-menu side="start" content-id="main-content" [disabled]="connected">
+      <ion-header >
+        <img src="../assets/images/taswirti.JPG">
         <ion-toolbar translucent>
-          <img src="../assets/images/taswirti.JPG">
-          <ion-title>Menu</ion-title>
+          
+          <ion-title slot="start">{{user.firstName+' '+user.lastName}}</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
