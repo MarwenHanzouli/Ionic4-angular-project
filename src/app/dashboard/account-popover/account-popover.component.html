@@ -7,5 +7,8 @@
     <ion-label>{{u["firstName"]+' '+u["lastName"]}}</ion-label>
   </ion-chip>
   <ion-item>{{u.role}}</ion-item>
-  <ion-item lines="none" detail="false" button onClick="logout()">Sign out</ion-item>
+  <ion-button fill="solid" expand="full" button onClick="logout()">
+    <ion-icon ios="log-out-outline" md="log-out"></ion-icon>
+    Sign out
+  </ion-button>
 </ion-list>

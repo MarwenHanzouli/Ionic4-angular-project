@@ -8,6 +8,7 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
 import { AccountPopoverComponent } from './account-popover/account-popover.component';
+import { NotificationsPopoverComponent } from './notifications-popover/notifications-popover.component';
 
 @NgModule({
   imports: [
@@ -16,8 +17,14 @@ import { AccountPopoverComponent } from './account-popover/account-popover.compo
     IonicModule,
     DashboardPageRoutingModule
   ],
-  entryComponents:[AccountPopoverComponent],
-  declarations: [DashboardPage,
-    AccountPopoverComponent]
+  entryComponents:[
+    AccountPopoverComponent,
+    NotificationsPopoverComponent
+  ],
+  declarations: [
+    DashboardPage,
+    AccountPopoverComponent,
+    NotificationsPopoverComponent
+  ]
 })
 export class DashboardPageModule {}
