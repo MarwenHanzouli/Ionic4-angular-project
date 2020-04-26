@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
+import { AccountPopoverComponent } from './account-popover/account-popover.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,8 @@ import { DashboardPage } from './dashboard.page';
     IonicModule,
     DashboardPageRoutingModule
   ],
-  declarations: [DashboardPage]
+  entryComponents:[AccountPopoverComponent],
+  declarations: [DashboardPage,
+    AccountPopoverComponent]
 })
 export class DashboardPageModule {}
