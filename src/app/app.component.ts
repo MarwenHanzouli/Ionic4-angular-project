@@ -6,7 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { User } from './models/User.model';
 import { UsersService } from './services/users.service';
 import { Subscription } from 'rxjs';
-
+import { first, skip, take } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -20,26 +20,7 @@ export class AppComponent implements OnInit,OnDestroy{
   private connected:boolean;
   private selectedIndex=0;
 
-  private menu=[
-    {
-      id:'Home',
-      title: 'Home',
-      url: '/dashboard/Home',
-      icon: 'home'
-    },
-    {
-      id:'Account',
-      title: 'My account',
-      url: '/dashboard/Account',
-      icon: 'person-circle'
-    },
-    {
-      id:'Notifications',
-      title: 'Notifications',
-      url: '/dashboard/Notifications',
-      icon: 'notifications'
-    }
-  ];
+  private menu=[];
   private menuUser=[
     {
       id:'Emergency',
@@ -88,6 +69,26 @@ export class AppComponent implements OnInit,OnDestroy{
   ngOnInit(): void {
     this.userSubscription=this.usersService.userOb.subscribe((u)=>
       {
+        this.menu=[
+          {
+            id:'Home',
+            title: 'Home',
+            url: '/dashboard/Home',
+            icon: 'home'
+          },
+          {
+            id:'Account',
+            title: 'My account',
+            url: '/dashboard/Account',
+            icon: 'person-circle'
+          },
+          {
+            id:'Notifications',
+            title: 'Notifications',
+            url: '/dashboard/Notifications',
+            icon: 'notifications'
+          }
+        ];
         if(u)
         {
           this.connected=false;
@@ -118,5 +119,12 @@ export class AppComponent implements OnInit,OnDestroy{
   }
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
+  }
+  acitve(){
+    const path = window.location.pathname.split('dashboard/')[1];
+    if (path !== undefined) 
+    {
+      this.selectedIndex = this.menu.findIndex(page => page.id.toLowerCase() === path.toLowerCase());
+    }
   }
 }

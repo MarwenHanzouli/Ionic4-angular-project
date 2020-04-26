@@ -8,5 +8,14 @@
     <ion-icon color="tertiary" (click)="presentPopoverAccount($event)" class="icon" slot="end" md="person-circle" ios="person-circle-outline"></ion-icon>
   </ion-toolbar>
 </ion-header>
+<ion-content>
+  <app-home *ngIf="home"></app-home>
+  <app-my-account *ngIf="account"></app-my-account>
+  <app-notifications *ngIf="notifications"></app-notifications>
+  <app-ambulances *ngIf="ambulances"></app-ambulances>
+  <app-ask-emergency *ngIf="askForEmergency"></app-ask-emergency>
+  <app-list-hospitals *ngIf="hospitals"></app-list-hospitals>
+  <app-my-ambulance *ngIf="ambulance"></app-my-ambulance>
+</ion-content>
 
 

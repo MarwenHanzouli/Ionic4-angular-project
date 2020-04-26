@@ -12,12 +12,61 @@ import { NotificationsPopoverComponent } from './notifications-popover/notificat
 export class DashboardPage implements OnInit {
   
   private title:string;
+  home:boolean;
+  account:boolean;
+  notifications:boolean;
+  ambulance:boolean;
+  ambulances:boolean;
+  askForEmergency:boolean;
+  hospitals:boolean;
 
   constructor(private activatedRoute:ActivatedRoute,
               public popoverController: PopoverController) { }
 
   ngOnInit() {
+    this.home=true;
+    this.account=this.notifications=this.ambulance=this.ambulances=this.askForEmergency=this.hospitals=false;
     this.title=this.activatedRoute.snapshot.paramMap.get('id');
+  }
+  ionViewWillEnter(){
+    const path = window.location.pathname.split('dashboard/')[1];
+    if (path !== undefined) 
+    {
+      if(path==="Home")
+      {
+        this.home=true;
+        this.account=this.notifications=this.ambulance=this.ambulances=this.askForEmergency=this.hospitals=false;
+      }else if(path==="Notifications")
+      {
+        this.notifications=true;
+        this.account=this.home=this.ambulance=this.ambulances=this.askForEmergency=this.hospitals=false;
+      }
+      else if(path==="Account")
+      {
+        this.account=true;
+        this.home=this.notifications=this.ambulance=this.ambulances=this.askForEmergency=this.hospitals=false;
+      }
+      else if(path==="Emergency")
+      {
+        this.askForEmergency=true;
+        this.account=this.home=this.notifications=this.ambulance=this.ambulances=this.hospitals=false;
+      }
+      else if(path==="Hospitals")
+      {
+        this.hospitals=true;
+        this.account=this.home=this.notifications=this.ambulance=this.ambulances=this.askForEmergency=false;
+      }
+      else if(path==="Ambulance")
+      {
+        this.ambulance=true;
+        this.account=this.home=this.notifications=this.hospitals=this.ambulances=this.askForEmergency=false;
+      }
+      else if(path==="Ambulances")
+      {
+        this.ambulances=true;
+        this.account=this.home=this.notifications=this.hospitals=this.ambulance=this.askForEmergency=false;
+      }
+    }
   }
   async presentPopoverAccount(ev: any) {
     const popover = await this.popoverController.create({

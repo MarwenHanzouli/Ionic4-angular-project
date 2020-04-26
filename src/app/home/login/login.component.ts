@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
+import { UsersService } from 'src/app/services/users.service';
+import { User } from 'src/app/models/User.model';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +21,9 @@ export class LoginComponent implements OnInit {
   color:string;
 
   constructor(private formBuilder: FormBuilder,
-              private router:Router) { }
+              private router:Router,
+              public loadingController: LoadingController,
+              private usersService:UsersService) { }
 
   ngOnInit() {
     this.initForm();
@@ -46,12 +51,19 @@ export class LoginComponent implements OnInit {
       this.color="primary"
     }
   }
-  login(){
+  async login(){
     this.submitted=true;
     if(this.authForm.invalid)
     {
       return;
     }
-    this.router.navigate(['/dashboard','Notifications'])
+    const loading = await this.loadingController.create({
+      message: 'Please wait...',
+      duration: 2000
+    });
+    await loading.present();
+    const { role, data } = await loading.onDidDismiss();
+    let user=new User('','',null,this.authForm.value['email'],this.authForm.value['password']);
+    this.usersService.login(user);
   }
 }
