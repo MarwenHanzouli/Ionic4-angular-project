@@ -1,9 +1,14 @@
+import { File } from './File.model'
+
 export class User {
-    constructor(public firstName:string,
-                public lastName:string,
-                public phone:number,
-                public email:string,
-                public password:string,){}
-                public repassword?:string
-                public image:File
+    public id:number;
+    public repassword:string;
+    public image:File;
+    public role:string;
+    constructor(
+        public firstName:string,
+        public lastName:string,
+        public phone:number,
+        public email:string,
+        public password:string){}
     }
