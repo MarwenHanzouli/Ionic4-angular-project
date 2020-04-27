@@ -4,9 +4,15 @@
       <ion-menu-button color="primary"></ion-menu-button>
     </ion-buttons>
     <ion-title>{{title}}</ion-title>
-    <ion-icon color="tertiary" (click)="presentPopoverNotifications($event)" class="icon" slot="end" md="notifications" ios="notifications-outline"></ion-icon>
-    <ion-icon color="tertiary" (click)="presentPopoverAccount($event)" class="icon" slot="end" md="person-circle" ios="person-circle-outline"></ion-icon>
+    <ion-button size="large" (click)="presentPopoverNotifications($event)" fill="clear" slot="end">
+      <ion-icon color="tertiary"  class="icon" slot="end" md="notifications" ios="notifications-outline"></ion-icon>
+      <ion-badge color="danger" class="notifications-badge" slot="end">8</ion-badge>
+    </ion-button>
+    <ion-button (click)="presentPopoverAccount($event)" fill="clear" slot="end">
+      <ion-icon color="tertiary"  class="icon" slot="end" md="person-circle" ios="person-circle-outline"></ion-icon>
+    </ion-button>
   </ion-toolbar>
+  
 </ion-header>
 <ion-content>
   <app-home *ngIf="home"></app-home>
@@ -16,6 +22,11 @@
   <app-ask-emergency *ngIf="askForEmergency"></app-ask-emergency>
   <app-list-hospitals *ngIf="hospitals"></app-list-hospitals>
   <app-my-ambulance *ngIf="ambulance"></app-my-ambulance>
+  <ion-fab (click)="emergency()" *ngIf="!askForEmergency" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger">
+      <ion-icon name="alert-circle"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
 
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
 import { AccountPopoverComponent } from './account-popover/account-popover.component';
 import { NotificationsPopoverComponent } from './notifications-popover/notifications-popover.component';
@@ -21,6 +21,7 @@ export class DashboardPage implements OnInit {
   hospitals:boolean;
 
   constructor(private activatedRoute:ActivatedRoute,
+              private router:Router,
               public popoverController: PopoverController) { }
 
   ngOnInit() {
@@ -83,5 +84,10 @@ export class DashboardPage implements OnInit {
       translucent: true
     });
     return await popover.present();
+  }
+  emergency(){
+    this.router.navigate(['/dashboard','Emergency'])
+    this.askForEmergency=true;
+    this.account=this.home=this.notifications=this.ambulance=this.ambulances=this.hospitals=false;
   }
 }

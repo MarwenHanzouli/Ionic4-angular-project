@@ -6,7 +6,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { User } from './models/User.model';
 import { UsersService } from './services/users.service';
 import { Subscription } from 'rxjs';
-import { first, skip, take } from 'rxjs/operators';
+import { first, skip, take, filter } from 'rxjs/operators';
+import { Router, NavigationEnd } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -55,7 +56,8 @@ export class AppComponent implements OnInit,OnDestroy{
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private usersService:UsersService 
+    private usersService:UsersService,
+    private router:Router
   ) {
     this.initializeApp();
   }
@@ -116,6 +118,13 @@ export class AppComponent implements OnInit,OnDestroy{
         }
       }
     );
+    this.router.events.pipe(filter(e=> e instanceof NavigationEnd)).subscribe(e=>{
+      const path = window.location.pathname.split('dashboard/')[1];
+      if (path !== undefined) 
+      {
+        this.selectedIndex = this.menu.findIndex(page => page.id.toLowerCase() === path.toLowerCase());
+      }
+    });
   }
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();

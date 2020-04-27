@@ -16,13 +16,20 @@ import { AmbulancesComponent } from './ambulances/ambulances.component';
 import { AskEmergencyComponent } from './ask-emergency/ask-emergency.component';
 import { ListHospitalsComponent } from './list-hospitals/list-hospitals.component';
 import { MyAmbulanceComponent } from './my-ambulance/my-ambulance.component';
+import { MaterialModule } from '../material.module';
+import { AgmCoreModule } from "@agm/core";
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DashboardPageRoutingModule
+    DashboardPageRoutingModule,
+    MaterialModule,
+    AgmCoreModule.forRoot({
+      apiKey: environment.apiKey
+    })
   ],
   entryComponents:[
     AccountPopoverComponent,
