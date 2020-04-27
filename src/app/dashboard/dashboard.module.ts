@@ -19,6 +19,9 @@ import { MyAmbulanceComponent } from './my-ambulance/my-ambulance.component';
 import { MaterialModule } from '../material.module';
 import { AgmCoreModule } from "@agm/core";
 import { environment } from 'src/environments/environment';
+import { MapComponent } from './map/map.component';
+import { MyRequestsComponent } from './my-requests/my-requests.component';
+import { AskComponent } from './ask/ask.component';
 
 @NgModule({
   imports: [
@@ -45,7 +48,10 @@ import { environment } from 'src/environments/environment';
     AmbulancesComponent,
     AskEmergencyComponent,
     ListHospitalsComponent,
-    MyAmbulanceComponent
+    MyAmbulanceComponent,
+    MapComponent,
+    MyRequestsComponent,
+    AskComponent
   ]
 })
 export class DashboardPageModule {}
