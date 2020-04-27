@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Plugins } from "@capacitor/core";
-import { GoogleMapsService } from 'src/app/services/google-maps.service';
 
 @Component({
   selector: 'app-ask-emergency',
@@ -8,22 +7,39 @@ import { GoogleMapsService } from 'src/app/services/google-maps.service';
   styleUrls: ['./ask-emergency.component.scss'],
 })
 export class AskEmergencyComponent implements OnInit {
-  lat: number;
-  lng: number;
-  address: string;
-  constructor(private googleMaps:GoogleMapsService) { }
+  
+  ask:boolean;
+  requests:boolean;
+  map:boolean;
+
+  constructor() { }
 
   ngOnInit() {
-    //this.getCurrentLocation();
+    this.ask=true;
+    this.requests=false;
+    this.map=false;
   }
-  getCurrentLocation() {
-    Plugins.Geolocation.getCurrentPosition().then(result => {
-      this.lat = result.coords.latitude;
-      this.lng = result.coords.longitude;
-      this.googleMaps.getAddress(this.lat, this.lng).subscribe(decodedAddress => {
-        this.address = decodedAddress;
-        console.log(this.address);
-      });
-    });
+  ionViewWillEnter(){
+    this.ask=true;
+    this.requests=false;
+    this.map=false;
   }
+  segmentChanged(event){
+    if(event.detail.value==="ask"){
+      this.ask=true;
+      this.requests=false;
+      this.map=false;
+    }
+    else if(event.detail.value==="requests"){
+      this.ask=false;
+      this.requests=true;
+      this.map=false;
+    }
+    else if(event.detail.value==="map"){
+      this.ask=false;
+      this.requests=false;
+      this.map=true;
+    }
+  }
+
 }

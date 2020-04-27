@@ -1,28 +1,21 @@
-<ion-router-outlet name="tabs"></ion-router-outlet>
 <ion-content>
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="schedule">
-        <ion-icon name="calendar"></ion-icon>
-        <ion-label>Schedule</ion-label>
-        <ion-badge>6</ion-badge>
-      </ion-tab-button>
-  
-      <ion-tab-button tab="speakers">
-        <ion-icon name="person-circle"></ion-icon>
-        <ion-label>Speakers</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+  <app-ask *ngIf="ask"></app-ask>
+  <app-my-requests *ngIf="requests"></app-my-requests>
+  <!-- <app-map *ngIf="map"></app-map> -->
+  <ion-footer translucent>
+    <ion-segment color="success" value="ask" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="ask" layout="icon-bottom">
+        <ion-icon md="call" ios="call-outline"></ion-icon>
+        <ion-label>Ask</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="requests" layout="icon-bottom">
+        <ion-icon md="list-circle" ios="list-circle-outline"></ion-icon>
+        <ion-label>My requests</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="map" layout="icon-bottom">
+        <ion-icon md="location" ios="location-outline"></ion-icon>
+        <ion-label>Map</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-footer>
 </ion-content>
-
-
-
-
-<!-- <agm-map [latitude]="lat" [longitude]="lng" [zoom]="15">
-    <agm-marker
-      [latitude]="lat"
-      [longitude]="lng"
-      (markerClick)="onMarkerClick()"
-    ></agm-marker>
-  </agm-map> -->
