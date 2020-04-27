@@ -10,6 +10,9 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
+import { UsersService } from './services/users.service';
+import { GoogleMapsService } from './services/google-maps.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,11 +21,14 @@ import { MaterialModule } from './material.module';
     BrowserModule,
     IonicModule.forRoot(), 
     AppRoutingModule, 
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    UsersService,
+    GoogleMapsService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
