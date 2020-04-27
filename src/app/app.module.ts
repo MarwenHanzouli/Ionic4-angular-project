@@ -13,6 +13,7 @@ import { MaterialModule } from './material.module';
 import { UsersService } from './services/users.service';
 import { GoogleMapsService } from './services/google-maps.service';
 import { HttpClientModule } from '@angular/common/http';
+import { PhotoService } from './services/photo.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     SplashScreen,
     UsersService,
     GoogleMapsService,
+    PhotoService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

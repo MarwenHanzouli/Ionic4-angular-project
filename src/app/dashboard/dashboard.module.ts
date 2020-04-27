@@ -22,6 +22,7 @@ import { environment } from 'src/environments/environment';
 import { MapComponent } from './map/map.component';
 import { MyRequestsComponent } from './my-requests/my-requests.component';
 import { AskComponent } from './ask/ask.component';
+import { PhotoComponent } from './photo/photo.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { AskComponent } from './ask/ask.component';
   ],
   entryComponents:[
     AccountPopoverComponent,
-    NotificationsPopoverComponent
+    NotificationsPopoverComponent,
+    PhotoComponent
   ],
   declarations: [
     DashboardPage,
@@ -51,7 +53,8 @@ import { AskComponent } from './ask/ask.component';
     MyAmbulanceComponent,
     MapComponent,
     MyRequestsComponent,
-    AskComponent
+    AskComponent,
+    PhotoComponent
   ]
 })
 export class DashboardPageModule {}
