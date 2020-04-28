@@ -4,5 +4,6 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
-  "cordova": {}
+  "cordova": {},
+  "linuxAndroidStudioPath":"/opt/android-studio-ide-192.6392135-linux/android-studio/bin/studio.sh"
 }

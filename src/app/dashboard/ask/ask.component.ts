@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PhotoService } from 'src/app/services/photo.service';
-import { ActionSheetController, ModalController } from '@ionic/angular';
+import { ActionSheetController, ModalController, ToastController } from '@ionic/angular';
 import { PhotoComponent } from '../photo/photo.component';
+import { Plugins } from '@capacitor/core';
+import { GoogleMapsService } from 'src/app/services/google-maps.service';
 
 @Component({
   selector: 'app-ask',
@@ -10,9 +12,15 @@ import { PhotoComponent } from '../photo/photo.component';
 })
 export class AskComponent implements OnInit {
 
+  lat: number;
+  lng: number;
+  address: string;
+
   constructor(public photoService: PhotoService,
               public actionSheetController: ActionSheetController,
-              public modalController: ModalController) { }
+              public modalController: ModalController,
+              private googleMaps:GoogleMapsService,
+              public toastController: ToastController) { }
 
   ngOnInit() {
     this.photoService.loadSaved();
@@ -54,5 +62,23 @@ export class AskComponent implements OnInit {
       }
     });
     return await modal.present();
+  }
+  getCurrentLocation() {
+    Plugins.Geolocation.getCurrentPosition().then(result => {
+      this.lat = result.coords.latitude;
+      this.lng = result.coords.longitude;
+      this.presentToast(this.googleMaps.getData(this.lat, this.lng))
+      // this.googleMaps.getAddress(this.lat, this.lng).subscribe(decodedAddress => {
+      //   this.address = decodedAddress;
+      //   console.log(this.address);
+      // });
+    });
+  }
+  async presentToast(message) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 8000
+    });
+    toast.present();
   }
 }

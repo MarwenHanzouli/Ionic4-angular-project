@@ -14,6 +14,7 @@ import { UsersService } from './services/users.service';
 import { GoogleMapsService } from './services/google-maps.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PhotoService } from './services/photo.service';
+import { HTTP } from '@ionic-native/http/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { PhotoService } from './services/photo.service';
     UsersService,
     GoogleMapsService,
     PhotoService,
+    HTTP,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

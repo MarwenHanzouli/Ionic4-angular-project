@@ -1,7 +1,7 @@
 <ion-content>
   <app-ask *ngIf="ask"></app-ask>
   <app-my-requests *ngIf="requests"></app-my-requests>
-  <!-- <app-map *ngIf="map"></app-map> -->
+  <app-map *ngIf="map"></app-map>
   <ion-footer translucent>
     <ion-segment color="success" value="ask" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="ask" layout="icon-bottom">

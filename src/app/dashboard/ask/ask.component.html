@@ -1,5 +1,6 @@
 <ion-content>
-  <ion-button color="primary" expand="block" fill="outline" [disabled]="photoService.photos.length===0">
+  <ion-button (click)="getCurrentLocation()"
+  color="primary" expand="block" fill="outline" [disabled]="photoService.photos.length===0">
     <ion-icon color="danger" slot="end" md="alert-circle" ios="alert-circle-outline"></ion-icon>
      Send this emergency
   </ion-button>

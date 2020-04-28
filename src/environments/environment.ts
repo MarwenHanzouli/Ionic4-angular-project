@@ -21,7 +21,7 @@ class Envi{
 
 export const environment = {
   production: false,
-  apiKey:"AIzaSyB8fW_Wli2bBfMIUxNV0_LJKj2kPF8XFfU"
+  apiKey:"AIzaSyA3AaJQ4HMFc2LkNpIop-HesVoQiYCqvYg"
 };
 
 /*
