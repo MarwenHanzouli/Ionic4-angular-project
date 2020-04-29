@@ -38,7 +38,9 @@
         <div *ngIf="f.email.errors.required">You must enter a value</div>
         <div *ngIf="f.email.errors.email">Not a valid email</div>
       </mat-error>
-
+      <mat-error *ngIf="emailRegistred">
+        <div>This email is already registred</div>
+      </mat-error>
       <ion-item>
         <ion-icon  color="secondary" name="lock-closed" slot="start"></ion-icon>
         <ion-label position="floating">Password</ion-label>

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch } from 'src/app/helpers/validators';
+import { UsersService } from 'src/app/services/users.service';
+import { User } from 'src/app/models/User.model';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -15,8 +18,12 @@ export class RegisterComponent implements OnInit {
   type:string;
   eye:string;
   color:string;
+  loader:any;
+  emailRegistred:boolean=false;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private usersService:UsersService,
+              public loadingController: LoadingController) { }
 
   ngOnInit() {
     this.initForm();
@@ -50,14 +57,49 @@ export class RegisterComponent implements OnInit {
       this.color="primary"
     }
   }
-  register(){
+  async register(){
     this.submitted=true;
     if(this.registerForm.invalid)
     {
       return;
     }
+    this.loader = await this.loadingController.create({
+      message: 'Please wait...'
+    });
+    let x=await this.loader.present();
+    const element = await this.loadingController.getTop();
+    let user=new User(this.registerForm.value['firstName'],this.registerForm.value['lastName'],
+    this.registerForm.value['phone'],this.registerForm.value['email'],this.registerForm.value['password'])
+    this.usersService.getUserFromFirebase('email',this.registerForm.value['email'])
+    .then(function(d){
+      if(d.hasChildren()){
+        if (element) 
+        {
+          element.dismiss();
+          
+        }
+      }
+      else{
+        this.usersService.register(user).subscribe(
+          () => {
+            this.loader.dismiss();
+            console.log('Enregistrement terminé !');
+          },
+          (error) => {
+            console.log('Erreur ! : ' + error);
+          }
+        );
+      }
+    })
     
-    console.log(this.registerForm.value)
   }
-
+  async presentLoading(){
+    this.loader = await this.loadingController.create({
+      message: 'Please wait...'
+    });
+    return await this.loader.present(); 
+  }
+  async dismissLoading(){
+    await this.loader.dismiss();
+  }
 }
