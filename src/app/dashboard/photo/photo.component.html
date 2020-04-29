@@ -7,12 +7,13 @@
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-  <div class="flex">
+  <ion-img [src]="photo.base64 ? photo.base64 : photo.webviewPath"></ion-img>
+  <!-- <div class="flex">
     <ion-button fill="clear">
       <ion-icon md="ellipsis-vertical" ios="ellipsis-vertical-outline"></ion-icon>
     </ion-button>
   </div>
   <div [ngClass]="{'position-img': mobile}">
     <ion-img [src]="photo.base64 ? photo.base64 : photo.webviewPath"></ion-img>
-  </div>
+  </div> -->
 </ion-content>

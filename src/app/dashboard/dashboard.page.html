@@ -4,13 +4,15 @@
       <ion-menu-button color="primary"></ion-menu-button>
     </ion-buttons>
     <ion-title>{{title}}</ion-title>
-    <ion-button size="large" (click)="presentPopoverNotifications($event)" fill="clear" slot="end">
-      <ion-icon color="tertiary"  class="icon" slot="end" md="notifications" ios="notifications-outline"></ion-icon>
-      <ion-badge color="danger" class="notifications-badge" slot="end">8</ion-badge>
-    </ion-button>
-    <ion-button (click)="presentPopoverAccount($event)" fill="clear" slot="end">
-      <ion-icon color="tertiary"  class="icon" slot="end" md="person-circle" ios="person-circle-outline"></ion-icon>
-    </ion-button>
+    <ion-buttons  slot="end">
+      <ion-button id="btn" (click)="presentPopoverNotifications($event)" fill="clear" slot="end">
+        <ion-icon color="tertiary"  class="icon" slot="end" md="notifications" ios="notifications-outline"></ion-icon>
+        <ion-badge color="danger" class="notifications-badge" slot="end">8</ion-badge>
+      </ion-button>
+      <ion-button (click)="presentPopoverAccount($event)" fill="clear" slot="end">
+        <ion-icon color="tertiary"  class="icon" slot="end" md="person-circle" ios="person-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
   
 </ion-header>

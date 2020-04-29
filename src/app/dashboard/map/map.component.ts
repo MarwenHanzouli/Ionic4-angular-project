@@ -47,7 +47,7 @@ export class MapComponent implements OnInit {
     /*Map options*/
     this.mapOptions = {
         center: this.location,
-        zoom: 21,
+        zoom: 16,
         mapTypeControl: false
     };
     setTimeout(() => {

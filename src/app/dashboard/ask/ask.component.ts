@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PhotoService } from 'src/app/services/photo.service';
-import { ActionSheetController, ModalController, ToastController } from '@ionic/angular';
+import { ActionSheetController, ModalController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { PhotoComponent } from '../photo/photo.component';
-import { Plugins } from '@capacitor/core';
+import { Plugins, PermissionType } from '@capacitor/core';
 import { GoogleMapsService } from 'src/app/services/google-maps.service';
-
+const { Permissions }=Plugins;
 @Component({
   selector: 'app-ask',
   templateUrl: './ask.component.html',
@@ -15,12 +15,14 @@ export class AskComponent implements OnInit {
   lat: number;
   lng: number;
   address: string;
-
+  description: string;
   constructor(public photoService: PhotoService,
               public actionSheetController: ActionSheetController,
               public modalController: ModalController,
               private googleMaps:GoogleMapsService,
-              public toastController: ToastController) { }
+              public toastController: ToastController,
+              public alertController: AlertController,
+              public loadingController: LoadingController) { }
 
   ngOnInit() {
     this.photoService.loadSaved();
@@ -67,7 +69,8 @@ export class AskComponent implements OnInit {
     Plugins.Geolocation.getCurrentPosition().then(result => {
       this.lat = result.coords.latitude;
       this.lng = result.coords.longitude;
-      this.presentToast(this.googleMaps.getData(this.lat, this.lng))
+      this.presentAlertConfirm(this.lat+' '+this.lng);
+      //this.presentToast(this.googleMaps.getData(this.lat, this.lng))
       // this.googleMaps.getAddress(this.lat, this.lng).subscribe(decodedAddress => {
       //   this.address = decodedAddress;
       //   console.log(this.address);
@@ -77,8 +80,55 @@ export class AskComponent implements OnInit {
   async presentToast(message) {
     const toast = await this.toastController.create({
       message: message,
-      duration: 8000
+      duration: 2000
     });
     toast.present();
+  }
+  async presentAlertConfirm(text:string) {
+    const alert = await this.alertController.create({
+      header: 'Confirm!',
+      message: 'Do you want send this emergency <strong>'+text+'</strong>!!!',
+      inputs:[
+        {
+          name: 'description',
+          type: 'textarea',
+          placeholder: 'Description'
+        }
+      ],
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            
+          }
+        }, {
+          text: 'Yes',
+          handler: (data) => {
+            this.description=data["description"];
+            this.presentLoading();
+          }
+        }
+      ]
+    });
+    // Permissions.query({ name: PermissionType.Geolocation }).then(function(data){
+    //   if(data.state==="granted")
+    //   {
+    //     console.log(this.lat+' '+this.lng)
+    //   }
+      
+    // });
+    await alert.present();
+  }
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      message: 'Please wait...',
+      duration: 2000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    this.presentToast('This emergency has been successfully sent: '+this.lat+' '+this.lng+' '+this.description)
   }
 }

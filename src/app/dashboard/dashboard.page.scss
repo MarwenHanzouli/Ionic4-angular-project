@@ -4,10 +4,14 @@
 }
 .notifications-badge {
     position: absolute;
-    top: 6px;
+    z-index: 1000;
+    top: 0px;
     right: -6px;
     border-radius: 80%;
 }
 
+#btn{
+    z-index: 999;
+}
 
 
