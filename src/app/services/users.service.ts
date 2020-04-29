@@ -17,17 +17,6 @@ export class UsersService {
   private u:any;
   constructor(private router:Router,
               private httpClient: HttpClient) {    
-    let user=new User('Marwen','Hanzouli',25995310,'marwenhanzouli@gmail.com','1234');
-    user.role="USER";
-    // Storage.get({ key: this.USER_STORAGE }).then(function(data) {
-    //   if(data.value){
-    //     console.log(JSON.parse(data.value));
-    //     this.userSubject.next(JSON.parse(data.value));
-    //   }
-      
-    // });
-    // this.userSubject=new BehaviorSubject(null);
-    // this.userOb=this.userSubject.asObservable();
   }
   public next(us:User){
     this.userSubject.next(us);
@@ -41,26 +30,13 @@ export class UsersService {
     .equalTo(value).limitToFirst(1).once('value');
   }
   login(u:any){
-    // u.lastName="Hanzouli";
-    // u.firstName="Marwen";
-    // u.phone=25595310;
-    // u.role="USER";
-    // this.userSubject.next(u);
-    // Storage.set({
-    //   key: this.USER_STORAGE,
-    //   value:JSON.stringify(u)});
-    // let x= await this.getUserFromStorage();
-    // this.router.navigate(['/dashboard','Home']);
     return this.getUserFromFirebase('email',u.email);
   }
-  async getUserFromStorage(){
-    const u = await Storage.get({ key: this.USER_STORAGE });
-    this.u=JSON.parse(u.value);
-  }
-  logout(){
+
+  async logout(){
     this.router.navigate(['/home']);
     this.userSubject.next(null);
-    Storage.remove({key:this.USER_STORAGE});
+    await Storage.remove({key:this.USER_STORAGE});
   }
   createNewUser(email: string, password: string) {
     return new Promise(
@@ -75,5 +51,5 @@ export class UsersService {
         );
       }
     );
-}
+  }
 }

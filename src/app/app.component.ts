@@ -8,6 +8,8 @@ import { UsersService } from './services/users.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
+import { Plugins } from '@capacitor/core';
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -70,7 +72,12 @@ export class AppComponent implements OnInit,OnDestroy{
       this.splashScreen.hide();
     });
   }
-  ngOnInit(): void {
+  async ngOnInit(){
+    let x=await Storage.get({ key: "USER" });
+    if(x.value!==null){
+      this.router.navigate(['/dashboard','Home'])
+      this.usersService.next(JSON.parse(x.value))
+    }
     this.userSubscription=this.usersService.userOb.subscribe((u)=>
       {
         this.menu=[

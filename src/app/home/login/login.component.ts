@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { UsersService } from 'src/app/services/users.service';
 import { User } from 'src/app/models/User.model';
+import { Plugins } from '@capacitor/core';
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-login',
@@ -20,6 +22,7 @@ export class LoginComponent implements OnInit {
   eye:string;
   color:string;
   private user:User;
+  
   constructor(private formBuilder: FormBuilder,
               private router:Router,
               public loadingController: LoadingController,
@@ -62,7 +65,6 @@ export class LoginComponent implements OnInit {
       message: 'Please wait...'
     });
     await loading.present();
-    //const { role, data } = await loading.onDidDismiss();
     let auth={
       'email':this.authForm.value['email'],
       'password':this.authForm.value['password']
@@ -74,12 +76,14 @@ export class LoginComponent implements OnInit {
         this.usersService.next(this.user);
         this.router.navigate(['/dashboard','Home']);
       }
-      console.log(this.user);
     }
     else{
       this.presentToast("This account is does not exist");
     }
     await loading.dismiss();
+    await Storage.set({
+       key: "USER",
+       value:JSON.stringify(this.user)});
     //this.usersService.createNewUser(user.email,user.password);
   }
 
