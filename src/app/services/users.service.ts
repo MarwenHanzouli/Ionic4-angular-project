@@ -4,30 +4,43 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 const { Storage } = Plugins;
-
+import * as firebase from 'firebase';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
-  private userSubject:BehaviorSubject<User>;
-  public userOb:Observable<User>;
+  private userSubject:BehaviorSubject<User>=new BehaviorSubject<User>(null);
+  public userOb:Observable<User>=this.userSubject.asObservable();
   private USER_STORAGE: string ="USER";
   private u:any;
-  constructor(private router:Router) { 
+  constructor(private router:Router,
+              private httpClient: HttpClient) {    
     let user=new User('Marwen','Hanzouli',25995310,'marwenhanzouli@gmail.com','1234');
     user.role="USER";
-    this.getUserFromStorage().then(function(value) {
-      console.log(value);
-      // expected output: "foo"
-    });
-    console.log(this.u)
-    this.userSubject=new BehaviorSubject(null);
-    this.userOb=this.userSubject.asObservable();
+    // Storage.get({ key: this.USER_STORAGE }).then(function(data) {
+    //   if(data.value){
+    //     console.log(JSON.parse(data.value));
+    //     this.userSubject.next(JSON.parse(data.value));
+    //   }
+      
+    // });
+    // this.userSubject=new BehaviorSubject(null);
+    // this.userOb=this.userSubject.asObservable();
   }
-
+  public next(us:User){
+    this.userSubject.next(us);
+  }
   register(user:User){
-    
+    return this.httpClient
+      .post('https://ionic-project-e5966.firebaseio.com/users.json', user)
+      
+    //return firebase.database().ref('/users').push(user);
+  }
+  getUserFromFirebase(key:string,value:string){
+    return firebase.database().ref('/users').orderByChild(key)
+    .equalTo(value).limitToFirst(1).once('value');
   }
   async login(u:User){
     u.lastName="Hanzouli";
@@ -39,7 +52,6 @@ export class UsersService {
       key: this.USER_STORAGE,
       value:JSON.stringify(u)});
     let x= await this.getUserFromStorage();
-    console.log(this.u)
     this.router.navigate(['/dashboard','Home']);
   }
   async getUserFromStorage(){
@@ -51,4 +63,18 @@ export class UsersService {
     this.userSubject.next(null);
     Storage.remove({key:this.USER_STORAGE});
   }
+  createNewUser(email: string, password: string) {
+    return new Promise(
+      (resolve, reject) => {
+        firebase.auth().createUserWithEmailAndPassword(email, password).then(
+          () => {
+            resolve();
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+      }
+    );
+}
 }

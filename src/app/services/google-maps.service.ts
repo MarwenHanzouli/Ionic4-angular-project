@@ -27,10 +27,10 @@ export class GoogleMapsService {
       console.log(response.headers);
       return JSON.parse(JSON.stringify(response.data));
     } catch (error) {
-      console.error(error.status);
-      console.error(error.error); // Error message as string
-      console.error(error.headers);
-      return JSON.parse(JSON.stringify(error.error));
+      console.log(error);
+      console.log(error); // Error message as string
+      console.log(error);
+      return JSON.parse(JSON.stringify(error));
     }
   }
   //This function makes an http call to google api to decode the cordinates
