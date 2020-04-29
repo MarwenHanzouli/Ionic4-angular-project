@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { HomeService } from '../services/home.service';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,8 @@ export class HomePage implements OnInit {
   private login:boolean;
   private register:boolean;
 
-  constructor() {}
+  constructor(private homeService:HomeService,
+    private el:ElementRef) {}
 
   segmentChanged(event){
     if(event.detail.value==="signup")
@@ -24,8 +26,13 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.login=true;
-    this.register=false;
+    this.homeService.obs.subscribe((data)=>{
+      this.login=data.login;
+      this.register=data.register;
+      if(this.login===true){
+        this.el.nativeElement.querySelector('ion-segment').setAttribute('value','signin')
+      }
+    })
   }
 
 }
