@@ -61,7 +61,14 @@
         <div *ngIf="f.repassword.errors.required">You must enter a password</div>
         <div *ngIf="f.repassword.errors.mustMatch">You must enter the same password</div>
       </mat-error>
-
+      <ion-item>
+        <ion-label>Role</ion-label>
+        <ion-select value="USER" (ionChange)="show($event.target.value)">
+          <ion-select-option value="USER">USER</ion-select-option>
+          <ion-select-option value="AGENT">AGENT</ion-select-option>
+          <ion-select-option value="AMBULANCIER">AMBULANCIER</ion-select-option>
+        </ion-select>
+      </ion-item>
       <ion-button type="submit" routerDirection="forward" color="tertiary" fill="solid" expand="block">
         <ion-icon name="person-add" slot="start"></ion-icon> 
         Sign up

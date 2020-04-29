@@ -5,6 +5,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { User } from 'src/app/models/User.model';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { HomeService } from 'src/app/services/home.service';
 
 @Component({
   selector: 'app-register',
@@ -22,12 +23,13 @@ export class RegisterComponent implements OnInit {
   color:string;
   loader:any=null;
   emailRegistred:boolean=false;
+  role:string="USER";
 
   constructor(private formBuilder: FormBuilder,
               private usersService:UsersService,
               public loadingController: LoadingController,
               public toastController: ToastController,
-              private router:Router) { }
+              private homeService:HomeService) { }
 
   ngOnInit() {
     this.initForm();
@@ -73,6 +75,7 @@ export class RegisterComponent implements OnInit {
     let x=await this.loader.present();
     let user=new User(this.registerForm.value['firstName'],this.registerForm.value['lastName'],
     this.registerForm.value['phone'],this.registerForm.value['email'],this.registerForm.value['password'])
+    user.role=this.role;
     let d=await this.usersService.getUserFromFirebase('email',this.registerForm.value['email'])
     if(d.hasChildren()){
       this.loader.dismiss();
@@ -84,8 +87,9 @@ export class RegisterComponent implements OnInit {
         () => {
           this.loader.dismiss();
           this.registred=true;
-          this.router.navigate(['/home'])
+              
           this.presentToast("This registration is successfully completed",3000);
+          this.homeService.displayLogin();
         },
         (error) => {
           this.loader.dismiss();
@@ -109,5 +113,9 @@ export class RegisterComponent implements OnInit {
       duration: dur ? dur : 2000
     });
     await toast.present();
+  }
+  show(v){
+    this.role=v;
+    console.log(this.role)
   }
 }
