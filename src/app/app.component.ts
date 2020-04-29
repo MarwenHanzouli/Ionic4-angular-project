@@ -6,8 +6,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { User } from './models/User.model';
 import { UsersService } from './services/users.service';
 import { Subscription } from 'rxjs';
-import { first, skip, take, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -60,6 +61,7 @@ export class AppComponent implements OnInit,OnDestroy{
     private router:Router
   ) {
     this.initializeApp();
+    
   }
 
   initializeApp() {
