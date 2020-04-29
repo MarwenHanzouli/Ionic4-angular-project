@@ -24,7 +24,7 @@
   <app-ask-emergency *ngIf="askForEmergency"></app-ask-emergency>
   <app-list-hospitals *ngIf="hospitals"></app-list-hospitals>
   <app-my-ambulance *ngIf="ambulance"></app-my-ambulance>
-  <ion-fab (click)="emergency()" *ngIf="!askForEmergency" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab (click)="emergency()" *ngIf="!askForEmergency && role==='USER'" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="danger">
       <ion-icon name="alert-circle"></ion-icon>
     </ion-fab-button>
