@@ -21,7 +21,17 @@ class Envi{
 
 export const environment = {
   production: false,
-  apiKey:"AIzaSyA3AaJQ4HMFc2LkNpIop-HesVoQiYCqvYg"
+  apiKey:"AIzaSyA3AaJQ4HMFc2LkNpIop-HesVoQiYCqvYg",
+  firebaseConfig : {
+    apiKey: "AIzaSyCzW5LrY5zErLHPX-khUli6Tq8lNJwOXL4",
+    authDomain: "ionic-project-e5966.firebaseapp.com",
+    databaseURL: "https://ionic-project-e5966.firebaseio.com",
+    projectId: "ionic-project-e5966",
+    storageBucket: "ionic-project-e5966.appspot.com",
+    messagingSenderId: "683467664135",
+    appId: "1:683467664135:web:930444eb48d5cb84d9b3a2",
+    measurementId: "G-G0VEDZ078S"
+  }
 };
 
 /*
