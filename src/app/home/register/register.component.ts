@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   type:string;
   eye:string;
   color:string;
-  loader:any;
+  loader:any=null;
   emailRegistred:boolean=false;
 
   constructor(private formBuilder: FormBuilder,
@@ -76,19 +76,20 @@ export class RegisterComponent implements OnInit {
         if (element) 
         {
           element.dismiss();
-          
         }
       }
       else{
-        this.usersService.register(user).subscribe(
-          () => {
-            this.loader.dismiss();
-            console.log('Enregistrement terminé !');
-          },
-          (error) => {
-            console.log('Erreur ! : ' + error);
-          }
-        );
+        this.loader.dismiss();
+        console.log("hhhhhhhhhhhhhh")
+        // this.usersService.register(user).subscribe(
+        //   () => {
+        //     this.loader.dismiss();
+        //     console.log('Enregistrement terminé !');
+        //   },
+        //   (error) => {
+        //     console.log('Erreur ! : ' + error);
+        //   }
+        // );
       }
     })
     

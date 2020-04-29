@@ -65,6 +65,6 @@ export class LoginComponent implements OnInit {
     const { role, data } = await loading.onDidDismiss();
     let user=new User('','',null,this.authForm.value['email'],this.authForm.value['password']);
     this.usersService.login(user);
-    this.usersService.createNewUser(user.email,user.password);
+    //this.usersService.createNewUser(user.email,user.password);
   }
 }
