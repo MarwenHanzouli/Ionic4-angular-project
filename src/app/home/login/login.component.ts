@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { UsersService } from 'src/app/services/users.service';
 import { User } from 'src/app/models/User.model';
 
@@ -19,11 +19,12 @@ export class LoginComponent implements OnInit {
   type:string;
   eye:string;
   color:string;
-
+  private user:User;
   constructor(private formBuilder: FormBuilder,
               private router:Router,
               public loadingController: LoadingController,
-              private usersService:UsersService) { }
+              private usersService:UsersService,
+              public toastController: ToastController) { }
 
   ngOnInit() {
     this.initForm();
@@ -58,13 +59,35 @@ export class LoginComponent implements OnInit {
       return;
     }
     const loading = await this.loadingController.create({
-      message: 'Please wait...',
-      duration: 2000
+      message: 'Please wait...'
     });
     await loading.present();
-    const { role, data } = await loading.onDidDismiss();
-    let user=new User('','',null,this.authForm.value['email'],this.authForm.value['password']);
-    this.usersService.login(user);
+    //const { role, data } = await loading.onDidDismiss();
+    let auth={
+      'email':this.authForm.value['email'],
+      'password':this.authForm.value['password']
+    }
+    let aut=await this.usersService.login(auth);
+    if(aut.hasChildren()){
+      this.user=aut.val()[Object.keys(aut.val())[0]];
+      if(this.user.password===auth.password) {
+        this.usersService.next(this.user);
+        this.router.navigate(['/dashboard','Home']);
+      }
+      console.log(this.user);
+    }
+    else{
+      this.presentToast("This account is does not exist");
+    }
+    await loading.dismiss();
     //this.usersService.createNewUser(user.email,user.password);
+  }
+
+  async presentToast(message,dur?) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: dur ? dur : 2000
+    });
+    await toast.present();
   }
 }
