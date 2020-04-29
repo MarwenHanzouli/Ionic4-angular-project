@@ -34,25 +34,24 @@ export class UsersService {
   }
   register(user:User){
     return this.httpClient
-      .post('https://ionic-project-e5966.firebaseio.com/users.json', user)
-      
-    //return firebase.database().ref('/users').push(user);
+      .post('https://ionic-project-e5966.firebaseio.com/users.json', user)    
   }
   getUserFromFirebase(key:string,value:string){
     return firebase.database().ref('/users').orderByChild(key)
     .equalTo(value).limitToFirst(1).once('value');
   }
-  async login(u:User){
-    u.lastName="Hanzouli";
-    u.firstName="Marwen";
-    u.phone=25595310;
-    u.role="USER";
-    this.userSubject.next(u);
-    Storage.set({
-      key: this.USER_STORAGE,
-      value:JSON.stringify(u)});
-    let x= await this.getUserFromStorage();
-    this.router.navigate(['/dashboard','Home']);
+  login(u:any){
+    // u.lastName="Hanzouli";
+    // u.firstName="Marwen";
+    // u.phone=25595310;
+    // u.role="USER";
+    // this.userSubject.next(u);
+    // Storage.set({
+    //   key: this.USER_STORAGE,
+    //   value:JSON.stringify(u)});
+    // let x= await this.getUserFromStorage();
+    // this.router.navigate(['/dashboard','Home']);
+    return this.getUserFromFirebase('email',u.email);
   }
   async getUserFromStorage(){
     const u = await Storage.get({ key: this.USER_STORAGE });
