@@ -32,7 +32,7 @@
       <ion-item>
         <ion-icon color="secondary" name="mail" slot="start"></ion-icon>
         <ion-label position="floating">Email</ion-label>
-        <ion-input clearInput="true" formControlName="email" inputmode="email"></ion-input>
+        <ion-input (ionChange)="emailRegistred=false" clearInput="true" formControlName="email" inputmode="email"></ion-input>
       </ion-item>
       <mat-error *ngIf="f.email.errors && (f.email.dirty || f.email.touched || submitted)">
         <div *ngIf="f.email.errors.required">You must enter a value</div>
@@ -68,4 +68,7 @@
       </ion-button>
     </div>
   </form>
+</div>
+<div class="main" *ngIf="registred">
+  
 </div>
