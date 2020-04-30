@@ -74,7 +74,8 @@ export class AppComponent implements OnInit,OnDestroy{
   }
   async ngOnInit(){
     let x=await Storage.get({ key: "USER" });
-    if(x.value!==null){
+    if(x.value!==null && x.value!=="undefined"){
+      console.log(x)
       this.router.navigate(['/dashboard','Home'])
       this.usersService.next(JSON.parse(x.value))
     }

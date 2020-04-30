@@ -6,11 +6,13 @@ import { Plugins } from '@capacitor/core';
 const { Storage } = Plugins;
 import * as firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
+  private apiUrl=environment.apiUrl;
   private userSubject:BehaviorSubject<User>=new BehaviorSubject<User>(null);
   public userOb:Observable<User>=this.userSubject.asObservable();
   private USER_STORAGE: string ="USER";
@@ -23,7 +25,7 @@ export class UsersService {
   }
   register(user:User){
     return this.httpClient
-      .post('https://ionic-project-e5966.firebaseio.com/users.json', user)    
+      .post(this.apiUrl+'/users.json', user)    
   }
   getUserFromFirebase(key:string,value:string){
     return firebase.database().ref('/users').orderByChild(key)

@@ -5,6 +5,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 import { UsersService } from 'src/app/services/users.service';
 import { User } from 'src/app/models/User.model';
 import { Plugins } from '@capacitor/core';
+import { NetworkService } from 'src/app/services/network.service';
 const { Storage } = Plugins;
 
 @Component({
@@ -22,18 +23,23 @@ export class LoginComponent implements OnInit {
   eye:string;
   color:string;
   private user:User;
-  
+  private network:boolean;
+
   constructor(private formBuilder: FormBuilder,
               private router:Router,
               public loadingController: LoadingController,
               private usersService:UsersService,
-              public toastController: ToastController) { }
+              public toastController: ToastController,
+              private netService:NetworkService) { }
 
   ngOnInit() {
     this.initForm();
     this.type="password";
     this.eye="eye-off";
     this.color="primary";
+    this.netService.obNetwork.subscribe((data)=>{
+      this.network=data.connected;
+    });
   }
   initForm()
   {
@@ -61,30 +67,40 @@ export class LoginComponent implements OnInit {
     {
       return;
     }
-    const loading = await this.loadingController.create({
-      message: 'Please wait...'
-    });
-    await loading.present();
-    let auth={
-      'email':this.authForm.value['email'],
-      'password':this.authForm.value['password']
-    }
-    let aut=await this.usersService.login(auth);
-    if(aut.hasChildren()){
-      this.user=aut.val()[Object.keys(aut.val())[0]];
-      if(this.user.password===auth.password) {
-        this.usersService.next(this.user);
-        this.router.navigate(['/dashboard','Home']);
+    if(!this.network)
+    {
+      this.presentToast("Check your network access");
+    }else{
+      const loading = await this.loadingController.create({
+        message: 'Please wait...'
+      });
+      await loading.present();
+      
+      let auth={
+        'email':this.authForm.value['email'],
+        'password':this.authForm.value['password']
       }
+      let aut=await this.usersService.login(auth);
+      if(aut.hasChildren()){
+        this.user=aut.val()[Object.keys(aut.val())[0]];
+        if(this.user.password===auth.password) {
+          this.usersService.next(this.user);
+          this.router.navigate(['/dashboard','Home']);
+        }
+        else{
+          this.presentToast("Email or password is invalid")
+        }
+      }
+      else{
+        this.presentToast("This account is does not exist");
+      }
+      await loading.dismiss();
+      await Storage.set({
+         key: "USER",
+         value:JSON.stringify(this.user)});
+      //this.usersService.createNewUser(user.email,user.password);
     }
-    else{
-      this.presentToast("This account is does not exist");
-    }
-    await loading.dismiss();
-    await Storage.set({
-       key: "USER",
-       value:JSON.stringify(this.user)});
-    //this.usersService.createNewUser(user.email,user.password);
+    
   }
 
   async presentToast(message,dur?) {

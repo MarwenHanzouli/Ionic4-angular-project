@@ -4,6 +4,8 @@ import { ActionSheetController, ModalController, ToastController, AlertControlle
 import { PhotoComponent } from '../photo/photo.component';
 import { Plugins, PermissionType } from '@capacitor/core';
 import { GoogleMapsService } from 'src/app/services/google-maps.service';
+import { EmergenciesService } from 'src/app/services/emergencies.service';
+import { Emergency } from 'src/app/models/Emergency.model';
 const { Permissions }=Plugins;
 @Component({
   selector: 'app-ask',
@@ -22,7 +24,8 @@ export class AskComponent implements OnInit {
               private googleMaps:GoogleMapsService,
               public toastController: ToastController,
               public alertController: AlertController,
-              public loadingController: LoadingController) { }
+              public loadingController: LoadingController,
+              private emergenciesService:EmergenciesService) { }
 
   ngOnInit() {
     this.photoService.loadSaved();
@@ -129,6 +132,10 @@ export class AskComponent implements OnInit {
     await loading.present();
 
     const { role, data } = await loading.onDidDismiss();
-    this.presentToast('This emergency has been successfully sent: '+this.lat+' '+this.lng+' '+this.description)
+    this.presentToast('This emergency has been successfully sent: '+this.lat+' '+this.lng+' '+this.description);
+    this.saveEmergency();
+  }
+  saveEmergency(){
+    this.emergenciesService.addEmergency(new Emergency(this.description,this.lat,this.lng));
   }
 }
