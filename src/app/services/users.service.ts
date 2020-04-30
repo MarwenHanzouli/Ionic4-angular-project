@@ -4,9 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 const { Storage } = Plugins;
-import * as firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
@@ -38,15 +36,15 @@ export class UsersService {
       password:user.password,
       role:user.role,
       phone:user.phone,
-      photo:user.image ? user.image : ''
+      photo:user.image ? user.image : '',
+      id:user.id ? user.id : null
     });
   }
-
 
   login(auth){
     return this.firestore.collection('users',ref => ref.where('email', '==', auth.email)
       .where('password', '==', auth.password))
-      .valueChanges()
+      .valueChanges();
   }
   getUserFromFirebaseByEmail(email:string){
     return this.firestore.collection('users',ref => ref.where('email', '==', email))
@@ -56,19 +54,5 @@ export class UsersService {
     this.router.navigate(['/home']);
     await Storage.remove({key:this.USER_STORAGE});
     this.userSubject.next(null);
-  }
-  createNewUser(email: string, password: string) {
-    return new Promise(
-      (resolve, reject) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password).then(
-          () => {
-            resolve();
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-      }
-    );
   }
 }

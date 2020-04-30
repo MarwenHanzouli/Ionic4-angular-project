@@ -1,7 +1,7 @@
 import { File } from './File.model'
 
 export class User {
-    public id:number;
+    public id:string;
     public repassword:string;
     public image:File;
     public role:string;
