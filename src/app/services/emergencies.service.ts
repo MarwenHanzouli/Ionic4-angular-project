@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { AngularFireDatabase, AngularFireList,AngularFireObject } from 'angularfire2/database';
 import { Emergency } from '../models/Emergency.model';
 import {  Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -10,30 +8,31 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class EmergenciesService {
 
-  private apiUrl=environment.apiUrl;
-  public emergenciesList: AngularFireList<Emergency>;
+  //public emergenciesList: AngularFireList<Emergency>;
 
-  private emergencies:Observable<Emergency[]>;
-  constructor(private db: AngularFireDatabase,
+  private emergencies:Observable<any[]>;
+  constructor(/*private db: AngularFireDatabase,*/
               private firestore:AngularFirestore) {
     this.getEmergencies();
-    this.emergencies.subscribe(console.log)
-    firestore.collection('emergencies').valueChanges().subscribe(console.log);
+    //this.emergencies.subscribe(console.log)
+    
+    this.emergencies.subscribe(console.log);
   }
   addEmergency(em:Emergency){
     em.affected=false;
-    this.emergenciesList.push(em);
+    //this.emergenciesList.push(em);
     this.firestore.collection('emergencies').add({
       lat:em.lat,
       lng:em.lng,
       description:em.description,
       affected:em.affected,
-      ambilancier:em.ambilancier
+      ambilancier:em.ambilancier ? em.ambilancier : ''
     });
   }
 
-  getEmergencies() {
-    this.emergenciesList=this.db.list("/emergencies");
-    this.emergencies=this.emergenciesList.valueChanges();
-  }
+ getEmergencies() {
+  //   this.emergenciesList=this.db.list("/emergencies");
+  //   this.emergencies=this.emergenciesList.valueChanges();
+  this.emergencies=this.firestore.collection('emergencies').valueChanges();
+ }
 }

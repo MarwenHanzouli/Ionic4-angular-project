@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch } from 'src/app/helpers/validators';
 import { UsersService } from 'src/app/services/users.service';
@@ -6,13 +6,15 @@ import { User } from 'src/app/models/User.model';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HomeService } from 'src/app/services/home.service';
+import { first } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit , OnDestroy{
 
   registerForm: FormGroup;
   submitted: boolean=false;
@@ -24,7 +26,7 @@ export class RegisterComponent implements OnInit {
   loader:any=null;
   emailRegistred:boolean=false;
   role:string="USER";
-
+  subscribe:Subscription;
   constructor(private formBuilder: FormBuilder,
               private usersService:UsersService,
               public loadingController: LoadingController,
@@ -76,27 +78,22 @@ export class RegisterComponent implements OnInit {
     let user=new User(this.registerForm.value['firstName'],this.registerForm.value['lastName'],
     this.registerForm.value['phone'],this.registerForm.value['email'],this.registerForm.value['password'])
     user.role=this.role;
-    let d=await this.usersService.getUserFromFirebase('email',this.registerForm.value['email'])
-    if(d.hasChildren()){
-      this.loader.dismiss();
-      this.emailRegistred=true;
-      this.presentToast("Try with another email")
-    }
-    else{
-      this.usersService.register(user).subscribe(
-        () => {
+    this.subscribe=this.usersService.getUserFromFirebaseByEmail(this.registerForm.value['email']).pipe(first()).subscribe(
+      async(data)=>{
+        if(data.length===0){
+          let x=await this.usersService.register(user);
           this.loader.dismiss();
           this.registred=true;
-              
-          this.presentToast("This registration is successfully completed",3000);
-          this.homeService.displayLogin();
-        },
-        (error) => {
-          this.loader.dismiss();
+          let y=await this.presentToast("This registration is successfully completed",3000);
+          this.homeService.displayLogin();  
         }
-      );
-    }
-    
+        else{
+          this.loader.dismiss();
+          this.emailRegistred=true;
+          this.presentToast("Try with another email")
+        }
+      }
+    );    
   }
   async presentLoading(){
     this.loader = await this.loadingController.create({
@@ -112,10 +109,14 @@ export class RegisterComponent implements OnInit {
       message: message,
       duration: dur ? dur : 2000
     });
-    await toast.present();
+    return toast.present();
   }
   show(v){
     this.role=v;
     console.log(this.role)
+  }
+
+  ngOnDestroy(): void {
+    this.subscribe.unsubscribe();
   }
 }

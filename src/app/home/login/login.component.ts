@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
@@ -6,6 +6,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { User } from 'src/app/models/User.model';
 import { Plugins } from '@capacitor/core';
 import { NetworkService } from 'src/app/services/network.service';
+import { Subscription } from 'rxjs';
 const { Storage } = Plugins;
 
 @Component({
@@ -13,7 +14,7 @@ const { Storage } = Plugins;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit ,OnDestroy{
 
   authForm: FormGroup;
   submitted: boolean=false;
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
   color:string;
   private user:User;
   private network:boolean;
+  subscribe:Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private router:Router,
@@ -80,25 +82,28 @@ export class LoginComponent implements OnInit {
         'email':this.authForm.value['email'],
         'password':this.authForm.value['password']
       }
-      let aut=await this.usersService.login(auth);
-      if(aut.hasChildren()){
-        this.user=aut.val()[Object.keys(aut.val())[0]];
-        if(this.user.password===auth.password) {
-          this.usersService.next(this.user);
-          this.router.navigate(['/dashboard','Home']);
+      this.subscribe=this.usersService.login(auth).subscribe(async (data)=>{
+        if(data.length===0){
+          this.presentToast("This account is does not exist");
         }
         else{
-          this.presentToast("Email or password is invalid")
+          if(data[0]['password']===auth.password) {
+            this.user=<User>data[0];
+            this.usersService.next(this.user);
+            this.router.navigate(['/dashboard','Home']);
+            await Storage.set({
+              key: "USER",
+              value:JSON.stringify(this.user)});
+              await loading.dismiss();
+          }
+          else{
+            this.presentToast("Email or password is invalid");
+            await loading.dismiss();
+          }
         }
-      }
-      else{
-        this.presentToast("This account is does not exist");
-      }
-      await loading.dismiss();
-      await Storage.set({
-         key: "USER",
-         value:JSON.stringify(this.user)});
-      //this.usersService.createNewUser(user.email,user.password);
+        
+      });
+      
     }
     
   }
@@ -109,5 +114,10 @@ export class LoginComponent implements OnInit {
       duration: dur ? dur : 2000
     });
     await toast.present();
+  }
+  ngOnDestroy(): void {
+    if(this.subscribe){
+      this.subscribe.unsubscribe();
+    }  
   }
 }

@@ -7,38 +7,55 @@ const { Storage } = Plugins;
 import * as firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { AngularFirestore } from '@angular/fire/firestore';
+
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
-  private apiUrl=environment.apiUrl;
   private userSubject:BehaviorSubject<User>=new BehaviorSubject<User>(null);
   public userOb:Observable<User>=this.userSubject.asObservable();
   private USER_STORAGE: string ="USER";
   private u:any;
+  private users:Observable<any[]>;
   constructor(private router:Router,
-              private httpClient: HttpClient) {    
+              private httpClient: HttpClient,
+              private firestore:AngularFirestore) { 
+            this.getUsers();   
   }
   public next(us:User){
     this.userSubject.next(us);
   }
-  register(user:User){
-    return this.httpClient
-      .post(this.apiUrl+'/users.json', user)    
+  getUsers() {
+    this.users=this.firestore.collection('users').valueChanges();
   }
-  getUserFromFirebase(key:string,value:string){
-    return firebase.database().ref('/users').orderByChild(key)
-    .equalTo(value).limitToFirst(1).once('value');
-  }
-  login(u:any){
-    return this.getUserFromFirebase('email',u.email);
+  register(user:User){ 
+    return this.firestore.collection('users').add({
+      firstName:user.firstName,
+      lastName:user.lastName,
+      email:user.email,
+      password:user.password,
+      role:user.role,
+      phone:user.phone,
+      photo:user.image ? user.image : ''
+    });
   }
 
+
+  login(auth){
+    return this.firestore.collection('users',ref => ref.where('email', '==', auth.email)
+      .where('password', '==', auth.password))
+      .valueChanges()
+  }
+  getUserFromFirebaseByEmail(email:string){
+    return this.firestore.collection('users',ref => ref.where('email', '==', email))
+    .snapshotChanges();
+  }
   async logout(){
     this.router.navigate(['/home']);
-    this.userSubject.next(null);
     await Storage.remove({key:this.USER_STORAGE});
+    this.userSubject.next(null);
   }
   createNewUser(email: string, password: string) {
     return new Promise(

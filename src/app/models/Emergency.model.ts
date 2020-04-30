@@ -3,6 +3,7 @@ export class Emergency{
     public ambilancier:string;
     constructor(public description:string,
                 public lat:number,
-                public lng:number){}
+                public lng:number,
+                public idEmmitter?:string){}
     
 }
