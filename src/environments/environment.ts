@@ -31,7 +31,8 @@ export const environment = {
     messagingSenderId: "683467664135",
     appId: "1:683467664135:web:930444eb48d5cb84d9b3a2",
     measurementId: "G-G0VEDZ078S"
-  }
+  },
+  apiUrl:'https://ionic-project-e5966.firebaseio.com'
 };
 
 /*

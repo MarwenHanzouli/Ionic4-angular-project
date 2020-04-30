@@ -23,6 +23,8 @@ import { MaterialModule } from '../material.module';
     HomePage,
     RegisterComponent,
     LoginComponent
+  ],
+  providers:[
   ]
 })
 export class HomePageModule {}
