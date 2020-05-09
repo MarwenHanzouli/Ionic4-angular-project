@@ -6,9 +6,11 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { User } from './models/User.model';
 import { UsersService } from './services/users.service';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, skip } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
 import { Plugins } from '@capacitor/core';
+import { NotificationsService } from './services/notifications.service';
+import { EmergenciesService } from './services/emergencies.service';
 const { Storage } = Plugins;
 
 @Component({
@@ -60,9 +62,14 @@ export class AppComponent implements OnInit,OnDestroy{
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private usersService:UsersService,
-    private router:Router
+    private router:Router,
+    private notificationService:NotificationsService,
+    public emergenciesService:EmergenciesService
   ) {
     this.initializeApp();
+    this.emergenciesService.emergencies.pipe(skip(1)).subscribe((data)=>{
+      this.notificationService.notifier(data[data.length-1]);
+    });
     
   }
 
@@ -72,13 +79,7 @@ export class AppComponent implements OnInit,OnDestroy{
       this.splashScreen.hide();
     });
   }
-  async ngOnInit(){
-    let x=await Storage.get({ key: "USER" });
-    if(x.value!==null && x.value!=="undefined"){
-      console.log(x)
-      this.router.navigate(['/dashboard','Home'])
-      this.usersService.next(JSON.parse(x.value))
-    }
+  ngOnInit(){
     this.userSubscription=this.usersService.userOb.subscribe((u)=>
       {
         this.menu=[
@@ -103,6 +104,7 @@ export class AppComponent implements OnInit,OnDestroy{
         ];
         if(u)
         {
+          this.router.navigate(['/dashboard','Home']);
           this.connected=false;
           this.user=u;
           if(this.user.role==="USER")

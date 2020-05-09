@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PhotoService } from 'src/app/services/photo.service';
 import { ActionSheetController, ModalController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { PhotoComponent } from '../photo/photo.component';
@@ -6,18 +6,22 @@ import { Plugins, PermissionType } from '@capacitor/core';
 import { GoogleMapsService } from 'src/app/services/google-maps.service';
 import { EmergenciesService } from 'src/app/services/emergencies.service';
 import { Emergency } from 'src/app/models/Emergency.model';
+import { UsersService } from 'src/app/services/users.service';
+import { Subscription } from 'rxjs';
 const { Permissions }=Plugins;
 @Component({
   selector: 'app-ask',
   templateUrl: './ask.component.html',
   styleUrls: ['./ask.component.scss'],
 })
-export class AskComponent implements OnInit {
+export class AskComponent implements OnInit , OnDestroy{
 
   lat: number;
   lng: number;
   address: string;
   description: string;
+  idUser:string;
+  subscription:Subscription;
   constructor(public photoService: PhotoService,
               public actionSheetController: ActionSheetController,
               public modalController: ModalController,
@@ -25,10 +29,15 @@ export class AskComponent implements OnInit {
               public toastController: ToastController,
               public alertController: AlertController,
               public loadingController: LoadingController,
-              private emergenciesService:EmergenciesService) { }
+              private emergenciesService:EmergenciesService,
+              private usersService:UsersService,
+              private photosService:PhotoService) { }
 
   ngOnInit() {
     this.photoService.loadSaved();
+    this.subscription=this.usersService.userOb.subscribe((data)=>{
+      this.idUser=data.id;
+    });
   }
   public async showActionSheet(photo, position) {
     const actionSheet = await this.actionSheetController.create({
@@ -136,6 +145,15 @@ export class AskComponent implements OnInit {
     this.saveEmergency();
   }
   saveEmergency(){
-    this.emergenciesService.addEmergency(new Emergency(this.description,this.lat,this.lng));
+    let em:Emergency=new Emergency(this.description,this.lat,this.lng);
+    em.idEmitter=this.idUser;
+    em.affected=false;
+    em.dateEmergency=new Date();
+    //em.photos=this.photosService.photos;
+    this.emergenciesService.addEmergency(em);
   }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
 }

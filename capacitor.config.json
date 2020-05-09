@@ -5,5 +5,12 @@
   "npmClient": "npm",
   "webDir": "www",
   "cordova": {},
-  "linuxAndroidStudioPath":"/opt/android-studio-ide-192.6392135-linux/android-studio/bin/studio.sh"
+  "linuxAndroidStudioPath":"/opt/android-studio-ide-192.6392135-linux/android-studio/bin/studio.sh",
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#488AFF",
+      "sound": "beep.wav"
+    }
+  }
 }

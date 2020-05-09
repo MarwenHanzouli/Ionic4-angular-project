@@ -85,16 +85,19 @@ export class LoginComponent implements OnInit ,OnDestroy{
       this.subscribe=this.usersService.login(auth).subscribe(async (data)=>{
         if(data.length===0){
           this.presentToast("This account is does not exist");
+          await loading.dismiss();
         }
-        else{
-          if(data[0]['password']===auth.password) {
-            this.user=<User>data[0];
+        else
+        {
+          if(data[0].payload.doc.data()['password']===auth.password) {
+            this.user=<User>data[0].payload.doc.data();
+            this.user.id=data[0].payload.doc.id;
             this.usersService.next(this.user);
             this.router.navigate(['/dashboard','Home']);
             await Storage.set({
               key: "USER",
               value:JSON.stringify(this.user)});
-              await loading.dismiss();
+            await loading.dismiss();
           }
           else{
             this.presentToast("Email or password is invalid");

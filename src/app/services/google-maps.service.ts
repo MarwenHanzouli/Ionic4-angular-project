@@ -10,29 +10,29 @@ import { HTTP } from '@ionic-native/http/ngx';
 export class GoogleMapsService {
 
   apiKey=environment.apiKey;
-  constructor(private http: HttpClient,
-    private httpCordova: HTTP) {
+  constructor(private http: HttpClient/*,
+    private httpCordova: HTTP*/) {
                 
   }
-  async getData(lat: number, lan: number) {
-    try {
-      let url=`https://maps.googleapis.com/maps/api/js?latlng=${lat},${lan}&key=${this.apiKey}`
-      const params = {};
-      const headers = {};
+  // async getData(lat: number, lan: number) {
+  //   try {
+  //     let url=`https://maps.googleapis.com/maps/api/js?latlng=${lat},${lan}&key=${this.apiKey}`
+  //     const params = {};
+  //     const headers = {};
 
-      const response = await this.httpCordova.get(url, params, headers);
+  //     const response = await this.httpCordova.get(url, params, headers);
 
-      console.log(response.status);
-      console.log(JSON.parse(response.data)); // JSON data returned by server
-      console.log(response.headers);
-      return JSON.parse(JSON.stringify(response.data));
-    } catch (error) {
-      console.log(error);
-      console.log(error); // Error message as string
-      console.log(error);
-      return JSON.parse(JSON.stringify(error));
-    }
-  }
+  //     console.log(response.status);
+  //     console.log(JSON.parse(response.data)); // JSON data returned by server
+  //     console.log(response.headers);
+  //     return JSON.parse(JSON.stringify(response.data));
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.log(error); // Error message as string
+  //     console.log(error);
+  //     return JSON.parse(JSON.stringify(error));
+  //   }
+  // }
   //This function makes an http call to google api to decode the cordinates
   getAddress(lat: number, lan: number) {
     let url=`https://maps.googleapis.com/maps/api/js?latlng=${lat},${lan}&key=${

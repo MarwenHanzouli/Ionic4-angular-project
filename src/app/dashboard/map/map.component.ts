@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { GoogleMapsService } from 'src/app/services/google-maps.service';
 import { Plugins } from '@capacitor/core';
+import { LoadingController } from '@ionic/angular';
 declare var google: any;
 @Component({
   selector: 'app-map',
@@ -21,7 +22,8 @@ export class MapComponent implements OnInit {
   marker: any;
   apiKey: any = 'AIzaSyA3AaJQ4HMFc2LkNpIop-HesVoQiYCqvYg'; /*Your API Key*/
   constructor(private googleMaps:GoogleMapsService,
-    public zone: NgZone) 
+    public zone: NgZone,
+    public loadingController: LoadingController) 
     {
       
   }
@@ -57,7 +59,7 @@ export class MapComponent implements OnInit {
         this.markerOptions.map = this.map;
         this.markerOptions.title = 'My Location';
         this.marker = new google.maps.Marker(this.markerOptions);
-    }, 3000);
+    }, 100);
   }
   getCurrentLocation() {
     // Plugins.Geolocation.getCurrentPosition().then(result => {

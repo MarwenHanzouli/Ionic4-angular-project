@@ -11,12 +11,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UsersService } from './services/users.service';
 import { GoogleMapsService } from './services/google-maps.service';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { PhotoService } from './services/photo.service';
-import { HTTP } from '@ionic-native/http/ngx';
-import * as firebase from 'firebase/app';
 import { environment } from 'src/environments/environment';
-firebase.initializeApp(environment.firebaseConfig);
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -31,7 +28,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'ionic-project-e5966'),
     AngularFireDatabaseModule,
-    
   ],
   providers: [
     StatusBar,
@@ -39,7 +35,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
     UsersService,
     GoogleMapsService,
     PhotoService,
-    HTTP,
     AngularFirestore,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
